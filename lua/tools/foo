@@ -1,0 +1,4 @@
+local _L = {} function _L.new() local self = {version = "0.2"} local _DATA=[===[]===] local _CODE={['test.lua']=[==[function _start()print("This is a test!")end
+]==],} function self.data()return _DATA end;function self.code()return _CODE end
+return self end local a=_ENV['LOB_OBJ_ENV']or _ENV;local b=_L.new()for c,d in pairs(b.code())do load(d,'_',nil,a)()end;if _ENV['LOB_OBJ_ACCESS']==true then return b else if a['_start']~=nil then a['_start'](...)else return b.globals end end
+

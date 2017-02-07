@@ -11,17 +11,22 @@ OCEMU_INSTANCE_FS := f6cc6715-cea5-434f-be87-f1e0c76a388d
 
 include mkmod.deps
 SUBDIRS   = $(addsuffix _submake, $(MODULES))
-all: $(SUBDIRS)
+all: initrd $(SUBDIRS)
 
 %_submake: %
 	@cd $<; $(MAKE)
 
 CLEANDIRS = $(addsuffix _clean, $(MODULES))
 clean: $(CLEANDIRS)
+	@-$(RM) -v initrd.cpio
 
 %_clean: %
 	cd $<; $(MAKE) clean
 
 run: clean all
-	cp src/core/kmod.lob $(OCEMU_INSTANCE)/$(OCEMU_INSTANCE_FS)/init.lua
+	cp src/core/core.lob $(OCEMU_INSTANCE)/$(OCEMU_INSTANCE_FS)/init.lua
 	cd $(OCEMU)/src && $(LUA52) boot.lua $(OCEMU_INSTANCE)
+
+initrd:
+	@echo Creating initrd..
+	@cd initrd.fs && ls | cpio -o  >> ../initrd.cpio

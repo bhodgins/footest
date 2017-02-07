@@ -2,4 +2,9 @@
 *.lob
 *~
 *#*
+*.swp
+*.o
+*.ko
+kimage
+d.img
 
